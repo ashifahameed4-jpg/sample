@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMate - Quizzes & Flashcards</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* Navbar */
+        nav {
+            background: #4f46e5;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            color: #c7d2fe;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 70px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            background: linear-gradient(135deg, #eef2ff, #ffffff);
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #4f46e5;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 15px;
+        }
+
+        .primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #4338ca;
+        }
+
+        .secondary {
+            background: white;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+            margin-left: 10px;
+        }
+
+        .secondary:hover {
+            background: #eef2ff;
+        }
+
+        .hero-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            width: 330px;
+        }
+
+        .hero-card h3 {
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0 20px;
+        }
+
+        .progress-bar {
+            width: 75%;
+            height: 100%;
+            background: #4f46e5;
+        }
+
+        /* General Sections */
+        section {
+            padding: 60px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #6b7280;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Subjects */
+        .subjects {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .subject {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #4f46e5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .subject h3 {
+            margin-bottom: 8px;
+        }
+
+        .subject p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Flashcards */
+        .flashcard-area {
+            background: #eef2ff;
+            text-align: center;
+        }
+
+        .flashcard {
+            max-width: 600px;
+            height: 300px;
+            margin: auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .flashcard small {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .flashcard h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .answer {
+            display: none;
+            color: #4f46e5;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Quiz */
+        .quiz-box {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .quiz-box h3 {
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .option:hover {
+            background: #eef2ff;
+            border-color: #4f46e5;
+        }
+
+        #quizResult {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Study Tips */
+        .tips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .tip {
+            background: #111827;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .tip h3 {
+            margin-bottom: 10px;
+            color: #a5b4fc;
+        }
+
+        .tip p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .features,
+            .tips {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .subjects {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .features,
+            .tips,
+            .subjects {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-card {
+                width: 100%;
+            }
+
+            .secondary {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">📚 StudyMate</div>
+
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+            <li><a href="#flashcards">Flashcards</a></li>
+            <li><a href="#quiz">Quiz</a></li>
+            <li><a href="#tips">Study Tips</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-text">
+            <h1>Study Smarter.<br><span>Remember More.</span></h1>
+
+            <p>
+                Make exam preparation easier with interactive quizzes,
+                smart flashcards, progress tracking and useful study tips.
+            </p>
+
+            <a href="#quiz" class="btn primary">Start Quiz</a>
+            <a href="#flashcards" class="btn secondary">View Flashcards</a>
+        </div>
+
+        <div class="hero-card">
+            <h3>📊 Your Study Progress</h3>
+
+            <p>Overall Progress</p>
+
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <p><strong>75%</strong> completed</p>
+
+            <br>
+
+            <p>🔥 5 day study streak</p>
+            <p>📝 120 questions answered</p>
+            <p>🎯 85% average score</p>
+        </div>
+
+    </section>
+
+
+    <!-- Features -->
+    <section>
+        <div class="section-title">
+            <h2>Everything You Need to Study</h2>
+            <p>Powerful tools to make exam preparation easier.</p>
+        </div>
+
+        <div class="features">
+
+            <div class="feature-card">
+                <div class="icon">🧠</div>
+                <h3>Flashcards</h3>
+                <p>
+                    Quickly revise important concepts using simple
+                    question-and-answer flashcards.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📝</div>
+                <h3>Practice Quizzes</h3>
+                <p>
+                    Test your knowledge with multiple-choice questions
+                    and instantly see your score.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📈</div>
+                <h3>Track Progress</h3>
+                <p>
+                    Monitor your study progress and identify topics
+                    that need more revision.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Subjects -->
+    <section id="subjects">
+
+        <div class="section-title">
+            <h2>Choose Your Subject</h2>
+            <p>Select a subject and start learning.</p>
+        </div>
+
+        <div class="subjects">
+
+            <div class="subject">
+                <h3>🔬 Science</h3>
+                <p>Biology, Physics and Chemistry</p>
+                <button class="btn primary">Study Now</button>
+            </div>
+
+            <div class="subject">
+                <h3>📐 Mathematics</h3>
+                <p>Algebra, Geometry and Calculus</p>
+                <button class="btn primary">Study Now</button>
+            </div>
+
+            <div class="subject">
+                <h3>🌎 Geography</h3>
+                <p>Countries, maps and environment</p>
+                <button class="btn primary">Study Now</button>
+            </div>
+
+            <div class="subject">
+                <h3>📖 History</h3>
+                <p>Important events and civilizations</p>
+                <button class="btn primary">Study Now</button>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Flashcards -->
+    <section class="flashcard-area" id="flashcards">
+
+        <div class="section-title">
+            <h2>🧠 Quick Flashcard</h2>
+            <p>Click the button to reveal the answer.</p>
+        </div>
+
+        <div class="flashcard">
+
+            <small>Question</small>
+
+            <h2 id="question">
+                What is the largest planet in our Solar System?
+            </h2>
+
+            <p class="answer" id="answer">
+                Jupiter is the largest planet in our Solar System.
+            </p>
+
+            <button class="btn primary" onclick="showAnswer()">
+                Show Answer
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- Quiz -->
+    <section id="quiz">
+
+        <div class="section-title">
+            <h2>📝 Quick Quiz</h2>
+            <p>Test your knowledge.</p>
+        </div>
+
+        <div class="quiz-box">
+
+            <h3>
+                1. Which planet is known as the Red Planet?
+            </h3>
+
+            <button class="option" onclick="checkAnswer(false)">
+                A. Venus
+            </button>
+
+            <button class="option" onclick="checkAnswer(true)">
+                B. Mars
+            </button>
+
+            <button class="option" onclick="checkAnswer(false)">
+                C. Jupiter
+            </button>
+
+            <button class="option" onclick="checkAnswer(false)">
+                D. Saturn
+            </button>
+
+            <p id="quizResult"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Study Tips -->
+    <section id="tips">
+
+        <div class="section-title">
+            <h2>💡 Smart Study Tips</h2>
+            <p>Simple techniques to improve your revision.</p>
+        </div>
+
+        <div class="tips">
+
+            <div class="tip">
+                <h3>⏰ Use the Pomodoro Technique</h3>
+                <p>
+                    Study for 25 minutes and take a 5-minute break.
+                    Repeat the cycle to stay focused.
+                </p>
+            </div>
+
+            <div class="tip">
+                <h3>🔄 Revise Regularly</h3>
+                <p>
+                    Review your flashcards regularly instead of
+                    trying to memorize everything the night before.
+                </p>
+            </div>
+
+            <div class="tip">
+                <h3>📝 Test Yourself</h3>
+                <p>
+                    Practice quizzes help you find weak areas
+                    and improve your memory.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <h3>📚 StudyMate</h3>
+        <p>Making exam preparation easier, one question at a time.</p>
+        <p>© 2026 StudyMate. All rights reserved.</p>
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script>
+
+        // Flashcard answer
+        function showAnswer() {
+            const answer = document.getElementById("answer");
+
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+            } else {
+                answer.style.display = "block";
+            }
+        }
+
+
+        // Quiz answer
+        function checkAnswer(correct) {
+
+            const result = document.getElementById("quizResult");
+
+            if (correct) {
+                result.innerHTML = "✅ Correct! Mars is known as the Red Planet.";
+                result.style.color = "green";
+            } else {
+                result.innerHTML = "❌ Incorrect. Try again!";
+                result.style.color = "red";
+            }
+        }
+
+    </script>
+
+</body>
+</html>
